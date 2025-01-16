@@ -21,7 +21,7 @@ export function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch revenue trends
+
         const revenueTrends = await getRevenueTrends();
         setRevenueData(revenueTrends);
 
@@ -35,7 +35,7 @@ export function Dashboard() {
           totalRevenue: revenueTrends.reduce((sum, item) => sum + item.value, 0),
           totalOrders: statuses.reduce((sum, item) => sum + item.value, 0),
           totalPendingOrders: statuses.find((status) => status.name === "pending")?.value || 0,
-          totalOrdersToday, // Sử dụng giá trị trả về từ API
+          totalOrdersToday,
         });
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);

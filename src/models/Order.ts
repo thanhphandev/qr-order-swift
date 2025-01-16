@@ -9,7 +9,7 @@ const OrderSchema = new Schema(
         name: { type: String, required: true }, // Item name
         quantity: { type: Number, required: true }, // Item quantity
         size: { type: String, required: false }, // Optional size of item
-        topping: [
+        toppings: [
           {
             name: { type: String, required: true }, // Name of the topping
             price: { type: Number, required: true }, // Price of the topping

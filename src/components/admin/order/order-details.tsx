@@ -121,9 +121,9 @@ const OrderDetails = ({ order, onEdit }: OrderDetailsProps) => {
                           {item.size && (
                             <p className="text-sm text-gray-500">Size: {item.size}</p>
                           )}
-                          {item.topping && item.topping.length > 0 && (
+                          {item.toppings && item.toppings.length > 0 && (
                             <div className="text-sm text-gray-500">
-                              Toppings: {item.topping.map((t) => (
+                              Toppings: {item.toppings.map((t) => (
                                 <span key={t.name} className="inline-flex items-center bg-gray-100 rounded px-2 py-0.5 text-xs mr-1">
                                   {t.name} (+ {formatMoney(t.price)})
                                 </span>

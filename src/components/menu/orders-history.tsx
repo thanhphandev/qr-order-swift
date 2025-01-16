@@ -86,10 +86,10 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
                                         </div>
                                         <p className="font-medium text-gray-900">{formatMoney(item.price)}</p>
                                     </div>
-                                    {item.topping && item.topping.length > 0 && (
+                                    {item.toppings && item.toppings.length > 0 && (
                                         <div className="mt-2">
                                             <p className="text-sm text-gray-500">Toppings:</p>
-                                            {item.topping.map((topping, index) => (
+                                            {item.toppings.map((topping, index) => (
                                                 <p key={index} className="text-sm text-gray-600">
                                                     {topping.name} (x{topping.quantity}) - {formatMoney(topping.price)}
                                                 </p>

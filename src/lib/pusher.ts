@@ -1,6 +1,7 @@
 import PusherServer from "pusher"
 import Pusher from "pusher-js"
 
+
 export const pusherServer = new PusherServer({
     appId: process.env.NEXT_PUBLIC_PUSHER_APP_ID!,
     key: process.env.NEXT_PUBLIC_PUSHER_PUBLISHABLE_ID!,
@@ -15,3 +16,7 @@ export const pusherClient = new Pusher(
         cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!
     }
 )
+
+// export const beamsClient = new Client({
+//     instanceId: process.env.NEXT_PUBLIC_PUSHER_INSTANCE_ID!,
+//   });

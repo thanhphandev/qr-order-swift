@@ -107,7 +107,7 @@ const CartView = ({ tables }: { tables: string[] }) => {
                 quantity: product.quantity,
                 size: product.size,
                 price: product.price,
-                topping: product.toppings?.map((topping) => (
+                toppings: product.toppings?.map((topping) => (
                     {
                         name: topping.name,
                         price: topping.price,

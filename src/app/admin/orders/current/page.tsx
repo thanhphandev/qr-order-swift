@@ -28,7 +28,6 @@ const Page = () => {
       }
     };
 
-    // Subscribe to Pusher
     pusherClient.subscribe('orders');
     const handleNewOrder = ({ order }: { order: OrderType }) => {
       setOrders((prevOrders) => [order, ...prevOrders]); // Add new orders to the top

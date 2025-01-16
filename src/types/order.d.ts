@@ -9,7 +9,7 @@ export interface OrderType {
         name: string,
         quantity: number,
         size?: string,
-        topping?: [{
+        toppings?: [{
             name: string,
             price: number,
             quantity: number,

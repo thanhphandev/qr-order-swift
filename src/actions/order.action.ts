@@ -4,7 +4,7 @@ import connectDB from "@/lib/mongodb";
 import { CreateOrderData, OrderType, status } from "@/types/order";
 import { Order } from "@/models/Order";
 import { pusherServer } from "@/lib/pusher";
-
+import { Types } from 'mongoose';
 
 export async function createOrder(orderData: CreateOrderData) {
     try {
@@ -21,7 +21,7 @@ export async function createOrder(orderData: CreateOrderData) {
                 name: item.name,
                 quantity: item.quantity,
                 size: item.size,
-                topping: item.topping?.map((topping: any) => ({
+                toppings: item.toppings?.map((topping: any) => ({
                     name: topping.name,
                     price: topping.price,
                     quantity: topping.quantity,
@@ -46,13 +46,13 @@ export async function createOrder(orderData: CreateOrderData) {
     }
 }
 
-export const triggerOrder = async(order: OrderType) => {
+export const triggerOrder = async (order: OrderType) => {
     try {
         pusherServer.trigger('orders', 'new-order', {
             order
         })
     } catch (error: any) {
-        throw new Error(error.message) 
+        throw new Error(error.message)
     }
 }
 
@@ -109,6 +109,9 @@ export async function deleteOrder(orderId: string) {
 
 export async function getOrderById(orderId: string): Promise<OrderType | null> {
     try {
+        if (!Types.ObjectId.isValid(orderId)) {
+            return null;  // Trả về null nếu orderId không hợp lệ
+        }
         await connectDB();
 
         const order = await Order.findById(orderId);
@@ -211,7 +214,7 @@ export const getOrders = async (filters: {
             notes: order.notes,
             createdAt: order.createdAt,
             updatedAt: order.updatedAt,
-        })) as OrderType[];
+        })) as OrderType[] || [];
     } catch (error) {
         console.error('Error fetching orders:', error);
         throw new Error('Failed to fetch orders');
