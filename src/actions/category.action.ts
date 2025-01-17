@@ -9,7 +9,7 @@ import { MenuItem } from '@/models/MenuItem';
 
 export async function addCategory(data: { name: string}) {
   try {
-
+    data.name = data.name.trim();
     await connectDB();
     const path = toPathLink(data.name);
     const category = new Category({ name: data.name, path: path });
@@ -99,7 +99,7 @@ export async function getCategories(): Promise<CategoryType[]> {
 
 export async function addSubcategory(data: { name: string; categoryId: string }) {
   try {
-    
+    data.name = data.name.trim();
     await connectDB();
     const path = toPathLink(data.name);
     const subcategory = new Subcategory({ name: data.name, path: path, categoryId: data.categoryId });

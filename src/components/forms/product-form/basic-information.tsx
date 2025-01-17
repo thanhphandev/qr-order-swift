@@ -26,7 +26,7 @@ const BasicInformation = () => {
 
   const fetchSubcategoriesData = async () => {
     if (selectedCategory) {
-      const subcategories = await getSubcategories(selectedCategory)
+      const subcategories = await getSubcategories(selectedCategory._id)
       setSubcategories(subcategories)
     }
   }

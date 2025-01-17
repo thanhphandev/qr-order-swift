@@ -3,6 +3,7 @@ import { filterProducts } from '@/actions/menu-item.action';
 import { getAllSubcategories } from '@/actions/category.action';
 import { Product } from '@/components/menu/product';
 import NoResultsFound from '@/components/widgets/not-found-product';
+import FavoriteProducts from '@/components/menu/favorites-product';
 
 export const revalidate = 30
 
@@ -14,12 +15,14 @@ export async function generateStaticParams() {
 }
 
 
-const page = async ({ params }: { params: Promise<{ subcategory: string }> }) => {
-  const subcategory = (await params).subcategory;
-  const products =
-    subcategory === 'all'
-      ? await filterProducts()
-      : await filterProducts(undefined, subcategory);
+const page = async ({ params }: { params: Promise<{ category: string; subcategory: string }> }) => {
+  const { category, subcategory } = await params;
+  if (category === 'favorites' && subcategory === 'all') {
+    return <FavoriteProducts />;
+  }
+
+  const products = subcategory === 'all' ? await filterProducts(category)
+    : await filterProducts(undefined, subcategory);
   if (!products || products.length === 0) {
     return <NoResultsFound />;
   }

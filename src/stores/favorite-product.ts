@@ -20,7 +20,7 @@ export const useFavoriteProductStore = create<FavoriteProductStore>()(
 
                 if (!isAlreadyFavorite) {
                     set((state) => ({
-                        favoriteProducts: [...state.favoriteProducts, product]
+                        favoriteProducts: [product, ...state.favoriteProducts]
                     }));
                 }
             },

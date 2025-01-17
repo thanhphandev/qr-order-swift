@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 const page = async ({ params }: { params: Promise<{ category: string }> }) => {
   const categoryPath = (await params).category;
   if (categoryPath === 'favorites') {
-      return <FavoriteProducts />
+    return <FavoriteProducts />
   }
 
   const products = await filterProducts(categoryPath);

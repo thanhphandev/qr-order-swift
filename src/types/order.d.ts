@@ -1,4 +1,4 @@
-export type status = 'pending' | 'completed' | 'paid';
+export type status = 'pending' | 'completed' | 'deny' | 'paid';
 export type typeOrder = 'dine-in' | 'take-away' | 'delivery';
 
 export interface OrderType {

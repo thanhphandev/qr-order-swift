@@ -1,4 +1,3 @@
-import { checkCategoryExists } from "@/actions/category.action";
 import * as z from "zod";
 
 export const categorySchema = z.object({

@@ -43,7 +43,7 @@ const Page = () => {
   }, []);
 
   // Filter pending orders
-  const pendingOrders = orders.filter((order) => order.status === 'pending');
+  const currentOrders = orders.filter((order) => order.status === 'pending' || order.status === 'completed');
 
   // Render loading state
   if (loading) {
@@ -58,9 +58,9 @@ const Page = () => {
   // Render orders or "No Orders Found"
   return (
     <>
-      {pendingOrders.length > 0 ? (
+      {currentOrders.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {pendingOrders.map((order) => (
+          {currentOrders.map((order) => (
             <Table
               key={order._id}
               table={order.table}

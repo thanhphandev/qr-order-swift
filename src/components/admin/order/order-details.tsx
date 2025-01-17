@@ -6,6 +6,7 @@ import { Clock, PrinterIcon, User, FileEdit, ClipboardList, Calendar, Info, Truc
 import { formatMoney, formatDate } from '@/lib/utils';
 import { updateOrderStatus, deleteOrder } from '@/actions/order.action';
 import { toast } from 'sonner';
+import { OrderStatus } from '@/components/widgets/status-badge';
 
 interface OrderDetailsProps {
   order: OrderType;
@@ -37,8 +38,14 @@ const OrderDetails = ({ order, onEdit }: OrderDetailsProps) => {
   }
 
   const rejectOrder = async() => {
-    await deleteOrder(order._id);
-    toast.success('Đã từ chối đơn hàng');
+    try {
+      await updateOrderStatus(order._id, 'deny');
+      setStatus('deny');
+      toast.success('Đã từ chối đơn hàng');
+    } catch (error) {
+      toast.error('Có lỗi xảy ra');
+      console.error('Error accepting order:', error);
+    }
   }
   const printInvoice = () => {
     toast.success('In hóa đơn');
@@ -49,7 +56,7 @@ const OrderDetails = ({ order, onEdit }: OrderDetailsProps) => {
         <div className="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex-1">
             <h2 className="text-2xl font-bold text-orange-500 mb-2">Đơn hàng</h2>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+            <div className="flex flex-col gap-4 text-sm text-gray-500">
               <span className="flex items-center">
                 <CreditCard className="w-4 h-4 mr-1" />
                 #{order._id}
@@ -63,8 +70,7 @@ const OrderDetails = ({ order, onEdit }: OrderDetailsProps) => {
                 Cập nhật: {formatDate(order.updatedAt, {showTime: true})}
               </span>
               <span className="flex items-center">
-                <Truck className="w-4 h-4 mr-1" />
-                Trạng thái: {status === 'pending' ? 'Chờ xác nhận' : status === 'completed' ? 'Đã xác nhận' : 'Đã thanh toán'}
+                <OrderStatus status={status} />
               </span>
             </div>
           </div>
@@ -222,7 +228,7 @@ const OrderDetails = ({ order, onEdit }: OrderDetailsProps) => {
             )}
             
             {/* Actions */}
-            {status !== 'completed' && status !== 'paid' && (
+            {status === "pending" && (
               <div className="flex gap-3 justify-between items-center">
                 <button
                   onClick={rejectOrder}

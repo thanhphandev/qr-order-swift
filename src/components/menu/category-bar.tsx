@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import type { CategoryType } from '@/types/category';
 import SubCategoryList from '@/components/menu/subcategory';
 import Link from 'next/link';
@@ -14,25 +14,12 @@ interface CategoryBarProps {
 
 export function CategoryBar({ categories }: CategoryBarProps) {
   const pathname = usePathname();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("best-sellers");
   const { favoriteProducts } = useFavoriteProductStore();
   const pathSegments = getSegment(pathname);
   const categoryFromPath = pathSegments[1];
   const subcategoryFromPath = pathSegments[2];
 
-  useEffect(() => {
-    if (categoryFromPath) {
-      const category = categories.find((category) => category.path === categoryFromPath);
-      if (category) {
-        setSelectedCategory(category.path || 'best-sellers');
-      }
-    }
-  }, [categoryFromPath]);
-
-  const handleCategoryClick = (categoryPath: string) => {
-    setSelectedCategory(categoryPath);
-  };
-
+  const selectedCategory = categoryFromPath || 'popular';
   const selectedCategoryData = categories.find((category) => category.path === selectedCategory);
 
   return (
@@ -40,42 +27,35 @@ export function CategoryBar({ categories }: CategoryBarProps) {
       <div className="flex gap-4 px-4 py-3 overflow-x-auto no-scrollbar">
         {favoriteProducts.length > 0 && (
           <Link
-            href="/menu/favorites"
+            href="/menu/favorites/all"
             key="favorites"
-            onClick={() => handleCategoryClick("favorites")}
             className={cn(
               'flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all',
-              selectedCategory === "favorites"
+              selectedCategory === 'favorites'
                 ? 'bg-orange-500 text-white'
                 : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
             )}
           >
-            <span className="text-sm font-medium">
-              Favorites
-            </span>
+            <span className="text-sm font-medium">Yêu thích</span>
           </Link>
         )}
         <Link
-          href={`/menu`}
-          key="best-sellers"
-          onClick={() => handleCategoryClick("best-sellers")}
+          href="/menu"
+          key="popular"
           className={cn(
             'flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all',
-            selectedCategory === "best-sellers"
+            selectedCategory === 'popular'
               ? 'bg-orange-500 text-white'
               : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
           )}
         >
-          <span className="text-sm font-medium">
-            Best Sellers
-          </span>
+          <span className="text-sm font-medium">Phổ biến</span>
         </Link>
 
         {categories.map((category) => (
           <Link
-            href={`/menu/${category.path}`}
+            href={`/menu/${category.path}/all`}
             key={category._id}
-            onClick={() => handleCategoryClick(category.path || '')}
             className={cn(
               'flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all',
               selectedCategory === category.path
@@ -83,19 +63,17 @@ export function CategoryBar({ categories }: CategoryBarProps) {
                 : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
             )}
           >
-            <span className="text-sm font-medium">
-              {category.name}
-            </span>
+            <span className="text-sm font-medium">{category.name}</span>
           </Link>
         ))}
       </div>
-      {selectedCategory && selectedCategoryData && (
+      {selectedCategoryData && (
         <SubCategoryList
-          selectedSubcategoryPath={subcategoryFromPath || ''}
+          selectedSubcategoryPath={subcategoryFromPath || 'all'}
           categoryPath={selectedCategoryData?.path || ''}
-          subcategories={selectedCategoryData?.subcategories || []}
+          subcategories={selectedCategoryData.subcategories || []}
         />
-      )}z
+      )}
     </nav>
   );
 }

@@ -166,10 +166,10 @@ interface OrderAnalytics {
     startDate: Date;
     endDate: Date;
 }
-curl -H "Content-Type: application/json" \
-     -H "Authorization: Bearer CBCEA2394D810355A862F0E6C83E0A6B7B4781A7B72234A9602BA51EE42B67E6" \
-     -X POST "https://8e06a40d-3c42-4bc7-a848-37ccb8bde3b8.pushnotifications.pusher.com/publish_api/v1/instances/8e06a40d-3c42-4bc7-a848-37ccb8bde3b8/publishes" \
-     -d '{"interests":["hello"],"web":{"notification":{"title":"Hello","body":"Hello, world!"}}}'
+// curl -H "Content-Type: application/json" \
+//      -H "Authorization: Bearer CBCEA2394D810355A862F0E6C83E0A6B7B4781A7B72234A9602BA51EE42B67E6" \
+//      -X POST "https://8e06a40d-3c42-4bc7-a848-37ccb8bde3b8.pushnotifications.pusher.com/publish_api/v1/instances/8e06a40d-3c42-4bc7-a848-37ccb8bde3b8/publishes" \
+//      -d '{"interests":["hello"],"web":{"notification":{"title":"Hello","body":"Hello, world!"}}}'
 
 interface Payment {
     _id: string;

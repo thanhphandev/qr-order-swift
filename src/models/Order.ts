@@ -19,7 +19,7 @@ const OrderSchema = new Schema(
         price: { type: Number, required: true }, // Price of the item
       },
     ],
-    status: { type: String, enum: ['pending', 'completed', 'paid'], default: 'pending', required: true }, // Order status
+    status: { type: String, enum: ['pending', 'completed', 'deny', 'paid'], default: 'pending', required: true }, // Order status
     typeOrder: {
       type: String,
       enum: ['dine-in', 'take-away', 'delivery'],
