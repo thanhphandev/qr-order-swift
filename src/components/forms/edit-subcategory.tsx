@@ -6,31 +6,27 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addSubcategory, checkSubcategoryExists } from "@/actions/category.action";
+import { updateSubcategory } from "@/actions/category.action";
 import { subcategorySchema } from '@/schemas/subcategory';
+import type { SubcategoryType } from "@/types/category";
 
-interface AddSubcategoryFormProps {
-    categoryId: string;
+interface EditSubcategoryFormProps {
+    subcategory: SubcategoryType
     onOpenChange: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function AddSubcategoryForm({ categoryId, onOpenChange }: AddSubcategoryFormProps) {
+export default function EditSubcategoryForm({ subcategory, onOpenChange }: EditSubcategoryFormProps) {
     const [loading, setLoading] = useState(false);
     const form = useForm<z.infer<typeof subcategorySchema>>({
         resolver: zodResolver(subcategorySchema),
-        defaultValues: { subcategory: "" },
+        defaultValues: { subcategory: subcategory.name },
     });
 
     const onSubmit = async (values: z.infer<typeof subcategorySchema>) => {
         setLoading(true);
         try {
-            const exists = await checkSubcategoryExists(values.subcategory);
-            if (exists) {
-                form.setError("subcategory", { type: "manual", message: "Tên danh mục phụ đã tồn tại." });
-                return;
-            }
-            await addSubcategory({ name: values.subcategory, categoryId: categoryId });
-            toast.success("Thêm danh mục con thành công!");
+            await updateSubcategory(subcategory._id, values.subcategory)
+            toast.success("Cập nhật danh mục phụ thành công!");
             onOpenChange(false);
         } catch (error) {
             console.error("Lỗi gửi form", error);
@@ -60,8 +56,8 @@ export default function AddSubcategoryForm({ categoryId, onOpenChange }: AddSubc
                                         aria-invalid={!!fieldState.error}
                                         aria-describedby={fieldState.error ? "category-error" : undefined}
                                         className={`w-full px-4 py-2 rounded-xl border transition-all duration-200 ${fieldState.error
-                                            ? "border-red-500 focus:ring-red-200"
-                                            : "border-orange-500 focus:ring-blue-200"
+                                                ? "border-red-500 focus:ring-red-200"
+                                                : "border-orange-500 focus:ring-blue-200"
                                             } focus:border-gray-500 focus:ring-4`}
                                         placeholder="Nhập danh mục con"
                                     />

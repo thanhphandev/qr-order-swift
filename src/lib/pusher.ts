@@ -17,6 +17,3 @@ export const pusherClient = new Pusher(
     }
 )
 
-// export const beamsClient = new Client({
-//     instanceId: process.env.NEXT_PUBLIC_PUSHER_INSTANCE_ID!,
-//   });

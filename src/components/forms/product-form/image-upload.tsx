@@ -14,7 +14,6 @@ interface ImageUploadProps {
   className?: string
   quality?: number
   maxSizeMB?: number
-  blur?: boolean
 }
 
 
@@ -25,7 +24,6 @@ const ACCEPTED_TYPES = {
 }
 const OPTIMAL_WIDTH = 1200
 const OPTIMAL_HEIGHT = 720
-const ASPECT_RATIO = OPTIMAL_WIDTH / OPTIMAL_HEIGHT
 
 const ImageUpload = ({ 
   value, 
@@ -34,36 +32,11 @@ const ImageUpload = ({
   className,
   quality = 85,
   maxSizeMB = 10,
-  blur = true
 }: ImageUploadProps) => {
   const [preview, setPreview] = useState<string>(value)
   const [isLoading, setIsLoading] = useState(false)
-  const [imageAspectRatio, setImageAspectRatio] = useState(ASPECT_RATIO)
-  const [blurDataUrl, setBlurDataUrl] = useState<string>('')
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
-  // Generate blur hash placeholder
-  const generateBlurPlaceholder = async (file: File) => {
-    if (!blur) return
-    
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const img = document.createElement('canvas')
-      const ctx = img.getContext('2d')
-      if (!ctx) return
-
-      const image = document.createElement('img') as HTMLImageElement;
-      image.onload = () => {
-        // Create small blur placeholder
-        img.width = 40
-        img.height = 40
-        ctx.drawImage(image, 0, 0, 40, 40)
-        setBlurDataUrl(img.toDataURL('image/jpeg', 0.5))
-      }
-      image.src = e.target?.result as string
-    }
-    reader.readAsDataURL(file)
-  }
 
   // Optimize image before upload
   const optimizeImage = async (file: File): Promise<File> => {
@@ -110,9 +83,6 @@ const ImageUpload = ({
       setIsLoading(true)
       setIsImageLoaded(false)
 
-      // Generate blur placeholder
-      await generateBlurPlaceholder(file)
-
       // Optimize image
       const optimizedFile = await optimizeImage(file)
 
@@ -150,7 +120,6 @@ const ImageUpload = ({
   const handleRemoveImage = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
     setPreview('')
-    setBlurDataUrl('')
     onChange('')
     setIsImageLoaded(false)
   }, [onChange])
@@ -176,7 +145,6 @@ const ImageUpload = ({
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/50 z-50 rounded-xl">
             <div className="relative">
-              <div className="w-12 h-12 border-4 border-muted rounded-full animate-pulse" />
               <Loader2 className="absolute inset-0 m-auto h-6 w-6 animate-spin" />
             </div>
           </div>
@@ -202,8 +170,6 @@ const ImageUpload = ({
                   "hover:scale-105 transition-transform"
                 )}
                 quality={quality}
-                blurDataURL={blurDataUrl}
-                placeholder={blur ? 'blur' : 'empty'}
                 onLoadingComplete={() => setIsImageLoaded(true)}
               />
             </div>

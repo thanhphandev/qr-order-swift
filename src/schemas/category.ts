@@ -1,7 +1,9 @@
+import { checkCategoryExists } from "@/actions/category.action";
 import * as z from "zod";
 
-export const categoryCreateSchema = z.object({
+export const categorySchema = z.object({
     category: z.string()
             .min(2, { message: "Danh mục phải có ít nhất 2 ký tự" })
-            .max(50, { message: "Danh mục không được quá 50 ký tự" }),
+            .max(50, { message: "Danh mục không được quá 50 ký tự" })
+
 })

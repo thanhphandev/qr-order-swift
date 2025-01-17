@@ -4,7 +4,7 @@ import React from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Donut, Ruler, TestTube2 } from 'lucide-react'
+import { Donut, Ruler } from 'lucide-react'
 import {
     FormControl,
     FormField,
@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Plus, Trash2 } from "lucide-react";
 import type { ProductFormValues } from '@/schemas/menu-item'
-import DevelopmentNotice from '@/components/dev/development-notice'
 
 const PricingOptions = () => {
     const form = useFormContext<ProductFormValues>();
@@ -25,7 +24,7 @@ const PricingOptions = () => {
 
     const { fields: toppingFields, append: appendTopping, remove: removeTopping } = useFieldArray({
         control: form.control,
-        name: "topping",
+        name: "toppings",
     });
 
     return (
@@ -126,7 +125,7 @@ const PricingOptions = () => {
                         <div key={field.id} className='flex gap-4 items-center'>
                             <FormField
                                 control={form.control}
-                                name={`topping.${index}.name`}
+                                name={`toppings.${index}.name`}
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
                                         <FormLabel className={index !== 0 ? "sr-only" : undefined}>
@@ -141,7 +140,7 @@ const PricingOptions = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name={`topping.${index}.price`}
+                                name={`toppings.${index}.price`}
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
                                         <FormLabel className={index !== 0 ? "sr-only" : undefined}>

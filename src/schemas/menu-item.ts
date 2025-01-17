@@ -8,24 +8,36 @@ export const basicInformationSchema = z.object({
   price: z.number().min(0, "Giá không được nhỏ hơn 0"),
 });
 
+
 export const pricingOptionsSchema = z.object({
   pricePerSize: z
     .array(
       z.object({
-        size: z.string(),
-        price: z.number().min(0),
+        size: z
+          .string()
+          .min(1, { message: 'Tên size không được để trống' }),
+        price: z
+          .number()
+          .min(0, { message: 'Giá phải lớn hơn hoặc bằng 0' })
       })
     )
     .optional(),
-  topping: z
+    
+  toppings: z
     .array(
       z.object({
-        name: z.string(),
-        price: z.number().min(0),
+        name: z
+          .string()
+          .min(1, { message: 'Tên topping không được để trống' }),
+        price: z
+          .number()
+          .min(0, { message: 'Giá phải lớn hơn hoặc bằng 0' })
       })
     )
-    .optional(),
+    .optional()
+    
 });
+
 
 export const additionalDetailsSchema = z.object({
   image: z.string().min(1, "Yêu cầu phải cung cấp hình ảnh"),

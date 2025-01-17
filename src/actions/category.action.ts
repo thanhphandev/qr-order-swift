@@ -5,6 +5,7 @@ import { CategoryType, SubcategoryType } from '@/types/category';
 import { revalidatePath } from 'next/cache';
 import connectDB from '@/lib/mongodb';
 import { toPathLink } from '@/lib/utils';
+import { MenuItem } from '@/models/MenuItem';
 
 export async function addCategory(data: { name: string}) {
   try {
@@ -24,6 +25,50 @@ export async function addCategory(data: { name: string}) {
   }
 }
 
+export async function checkCategoryExists(name: string): Promise<boolean> {
+  try {
+    await connectDB();
+    const existingCategory = await Category.findOne({ name });
+    return !!existingCategory; // Trả về true nếu tồn tại
+  } catch (error) {
+    console.error("Error checking category existence:", error);
+    throw new Error("Không thể kiểm tra danh mục. Vui lòng thử lại.");
+  }
+}
+
+export async function checkSubcategoryExists(name: string): Promise<boolean> {
+  try {
+    await connectDB();
+    const existingCategory = await Subcategory.findOne({ name });
+    return !!existingCategory; // Trả về true nếu tồn tại
+  } catch (error) {
+    console.error("Error checking category existence:", error);
+    throw new Error("Không thể kiểm tra danh mục phụ. Vui lòng thử lại.");
+  }
+}
+
+export async function isCategoryLinked(categoryId: string): Promise<boolean> {
+  try {
+    const hasSubcategories = await Subcategory.exists({ categoryId: categoryId });
+    const hasProducts = await MenuItem.exists({ category: categoryId });
+    
+    return !!hasSubcategories || !!hasProducts;
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra liên kết của danh mục:", error);
+    throw new Error("Không thể kiểm tra liên kết của danh mục.");
+  }
+}
+
+export async function isSubcategoryLinked(subcategoryId: string): Promise<boolean> {
+  try {
+    const hasProducts = await MenuItem.exists({ subcategory: subcategoryId });
+    
+    return !!hasProducts;
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra liên kết của danh mục:", error);
+    throw new Error("Không thể kiểm tra liên kết của danh mục.");
+  }
+}
 
 export async function getCategories(): Promise<CategoryType[]> {
   try {
@@ -152,3 +197,62 @@ export async function getAllSubcategories() : Promise<CategoryType[]>{
     throw new Error('Failed to fetch subcategories. Please try again.');
   }
 }
+
+export async function updateCategory(categoryId: string, newName: string) {
+  try {
+    await connectDB();
+
+    const newPath = toPathLink(newName);
+
+    const updatedCategory = await Category.findByIdAndUpdate(
+      categoryId,
+      { name: newName, path: newPath },
+      { new: true }
+    );
+
+    if (!updatedCategory) {
+      throw new Error('Category not found.');
+    }
+
+    revalidatePath('/admin/menu/categories');
+
+    return {
+      _id: updatedCategory._id.toString(),
+      name: updatedCategory.name,
+      path: updatedCategory.path,
+    };
+  } catch (error) {
+    console.error('Error updating category:', error);
+    throw new Error('Failed to update category. Please try again.');
+  }
+}
+
+export async function updateSubcategory(subcategoryId: string, newName: string) {
+  try {
+    await connectDB();
+
+    const newPath = toPathLink(newName);
+
+    const updatedSubcategory = await Subcategory.findByIdAndUpdate(
+      subcategoryId,
+      { name: newName, path: newPath },
+      { new: true }
+    );
+
+    if (!updatedSubcategory) {
+      throw new Error('Subcategory not found.');
+    }
+
+    revalidatePath('/admin/menu/categories');
+
+    return {
+      _id: updatedSubcategory._id.toString(),
+      name: updatedSubcategory.name,
+      path: updatedSubcategory.path,
+    };
+  } catch (error) {
+    console.error('Error updating subcategory:', error);
+    throw new Error('Failed to update subcategory. Please try again.');
+  }
+}
+

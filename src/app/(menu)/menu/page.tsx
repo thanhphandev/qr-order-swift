@@ -6,7 +6,7 @@ import NoResultsFound from '@/components/widgets/not-found-product';
 export const revalidate = 30
 
 const Menu = async () => {
-  const products = await filterProducts(undefined, undefined, true);
+  const products = await filterProducts(undefined, undefined, true); // get Best seller
   return (
     <>
       {products.length > 0 ?

@@ -3,6 +3,7 @@ import { filterProducts } from '@/actions/menu-item.action';
 import { getCategories } from '@/actions/category.action';
 import { Product } from '@/components/menu/product';
 import NoResultsFound from '@/components/widgets/not-found-product';
+import FavoriteProducts from '@/components/menu/favorites-product';
 
 export const revalidate = 30
 
@@ -15,6 +16,10 @@ export async function generateStaticParams() {
 
 const page = async ({ params }: { params: Promise<{ category: string }> }) => {
   const categoryPath = (await params).category;
+  if (categoryPath === 'favorites') {
+      return <FavoriteProducts />
+  }
+
   const products = await filterProducts(categoryPath);
   return (
     <>

@@ -1,11 +1,12 @@
+import type { CategoryType } from '@/types/category';
 import { create } from 'zustand'
 
 interface CategoryStore {
-    selectedCategory: string | null;
-    setSelectedCategory: (categoryId: string | null) => void;
+    selectedCategory: CategoryType | null;
+    setSelectedCategory: (category: CategoryType | null) => void;
 }
 
 export const useCategoryStore = create<CategoryStore>((set) => ({
     selectedCategory: null,
-    setSelectedCategory: (categoryId) => set({ selectedCategory: categoryId }),
+    setSelectedCategory: (category: CategoryType | null) => set({ selectedCategory: category }),
 }))

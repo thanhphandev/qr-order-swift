@@ -100,6 +100,7 @@ const MenuItem = ({ product }: MenuItemProps) => {
                     src={product.image}
                     alt={product.name}
                     fill
+                    priority
                     className="object-cover transition-transform duration-300 hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />

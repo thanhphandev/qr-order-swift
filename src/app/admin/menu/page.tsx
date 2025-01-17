@@ -1,7 +1,7 @@
-import { CategoryBar } from '@/components/admin/menu/CategoryBar'
+import { CategoryBar } from '@/components/admin/menu/category-bar'
 import { getCategories } from '@/actions/category.action'
 import React from 'react'
-import { getProducts } from '@/actions/menu-item.action';
+import { filterProducts, getProducts } from '@/actions/menu-item.action';
 import MenuItem from '@/components/admin/menu/menu-item';
 
 const Menu = async () => {
@@ -9,12 +9,7 @@ const Menu = async () => {
   const products = await getProducts();
   return (
     <div>
-      <CategoryBar categories={categories} />
-      <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.slice().reverse().map((product) => (
-          <MenuItem key={product._id} product={product} />
-        ))}
-      </div>
+      <CategoryBar products={products} categories={categories} />
 
     </div>
   )

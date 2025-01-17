@@ -36,11 +36,11 @@ export default function NewProduct({onOpenChange}: NewProductProps) {
     defaultValues: {
       name: "",
       description: "",
-      category: selectedCategory ?? "",
+      category: selectedCategory?._id ?? "",
       subcategory: undefined,
       price: 0,
       pricePerSize: [],
-      topping: [],
+      toppings: [],
       image: "",
       isAvailable: true,
       isBestSeller: false,

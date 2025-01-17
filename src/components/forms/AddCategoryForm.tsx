@@ -6,8 +6,8 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addCategory } from "@/actions/category.action";
-import { categoryCreateSchema } from '@/schemas/category';
+import { addCategory, checkCategoryExists } from "@/actions/category.action";
+import { categorySchema } from "@/schemas/category";
 
 interface AddCategoryFormProps {
     onOpenChange: Dispatch<SetStateAction<boolean>>;
@@ -15,14 +15,19 @@ interface AddCategoryFormProps {
 
 export default function AddCategoryForm({ onOpenChange }: AddCategoryFormProps) {
     const [loading, setLoading] = useState(false);
-    const form = useForm<z.infer<typeof categoryCreateSchema>>({
-        resolver: zodResolver(categoryCreateSchema),
+    const form = useForm<z.infer<typeof categorySchema>>({
+        resolver: zodResolver(categorySchema),
         defaultValues: { category: "" },
     });
 
-    const onSubmit = async (values: z.infer<typeof categoryCreateSchema>) => {
+    const onSubmit = async (values: z.infer<typeof categorySchema>) => {
         setLoading(true);
         try {
+            const exists = await checkCategoryExists(values.category);
+            if (exists) {
+                form.setError("category", { type: "manual", message: "Tên danh mục đã tồn tại." });
+                return;
+            }
             await addCategory({ name: values.category });
             toast.success("Thêm danh mục thành công!");
             onOpenChange(false);
@@ -48,41 +53,16 @@ export default function AddCategoryForm({ onOpenChange }: AddCategoryFormProps) 
                         <FormItem className="space-y-2">
                             <FormLabel className="text-sm font-medium text-gray-700">Danh mục</FormLabel>
                             <FormControl>
-                                <div className="relative">
-                                    <Input
-                                        {...field}
-                                        aria-invalid={!!fieldState.error}
-                                        aria-describedby={fieldState.error ? "category-error" : undefined}
-                                        className={`w-full px-4 py-2 rounded-xl border transition-all duration-200 ${fieldState.error
-                                                ? "border-red-500 focus:ring-red-200"
-                                                : "border-orange-500 focus:ring-blue-200"
-                                            } focus:border-gray-500 focus:ring-4`}
-                                        placeholder="Nhập danh mục"
-                                    />
-                                    {fieldState.error && (
-                                        <div
-                                            id="category-error"
-                                            className="absolute right-3 top-2.5 text-red-500"
-                                            role="alert"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="20"
-                                                height="20"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <circle cx="12" cy="12" r="10" />
-                                                <line x1="12" y1="8" x2="12" y2="12" />
-                                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                                            </svg>
-                                        </div>
-                                    )}
-                                </div>
+                                <Input
+                                    {...field}
+                                    aria-invalid={!!fieldState.error}
+                                    aria-describedby={fieldState.error ? "category-error" : undefined}
+                                    className={`w-full px-4 py-2 rounded-xl border transition-all duration-200 ${fieldState.error
+                                        ? "border-red-500 focus:ring-red-200"
+                                        : "border-orange-500 focus:ring-blue-200"
+                                        }`}
+                                    placeholder="Nhập danh mục"
+                                />
                             </FormControl>
                             <FormMessage className="text-sm text-red-500 mt-1" />
                         </FormItem>

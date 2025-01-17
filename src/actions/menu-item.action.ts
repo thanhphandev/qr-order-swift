@@ -37,6 +37,7 @@ export const getProductBySlug = async (slug: string): Promise<MenuItemType | nul
         return {
             _id: menuItem._id.toString(),
             name: menuItem.name,
+            slug: menuItem.slug,
             description: menuItem.description,
             category: menuItem.category.toString(),
             subcategory: menuItem.subcategory?.toString(),
