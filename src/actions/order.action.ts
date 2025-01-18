@@ -5,6 +5,7 @@ import { CreateOrderData, OrderType, status } from "@/types/order";
 import { Order } from "@/models/Order";
 import { pusherServer } from "@/lib/pusher";
 import { Types } from 'mongoose';
+import type { status as StatusType } from "@/types/order";
 
 export async function createOrder(orderData: CreateOrderData) {
     try {
@@ -56,6 +57,19 @@ export const triggerOrder = async (order: OrderType) => {
     }
 }
 
+export const triggerOrderStatus = async (orderId: string, status: StatusType): Promise<void> => {
+    try {
+        await pusherServer.trigger('orders', 'order-status', {
+            orderId,
+            status,
+        });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error(`Failed to trigger order status: ${errorMessage}`);
+        throw new Error(`Order status trigger failed: ${errorMessage}`);
+    }
+};
+
 export async function updateOrderStatus(orderId: string, status: status) {
     try {
         await connectDB();
@@ -65,6 +79,7 @@ export async function updateOrderStatus(orderId: string, status: status) {
             { status },
             { new: true }
         );
+        await triggerOrderStatus(orderId, status);
 
         return {
             id: updatedOrder._id.toString(),

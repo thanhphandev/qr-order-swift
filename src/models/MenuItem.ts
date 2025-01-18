@@ -4,7 +4,7 @@ import mongoose, { Schema, model, Types } from 'mongoose';
 const MenuItemSchema = new Schema({
     name: { type: String, required: true },
     slug: { type: String },
-    description: { type: String, required: true },
+    description: { type: String},
     category: { type: Types.ObjectId, ref: 'Category', required: true },
     subcategory: { type: Types.ObjectId, ref: 'Subcategory' },
     price: { type: Number, required: true },

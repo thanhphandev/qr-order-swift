@@ -128,21 +128,21 @@ interface Settings {
         email: string;
         address: string;
     };
-    openingHours: { 
-        day: string; // e.g., 'Monday', 'Tuesday'
-        open: string; // Opening time in HH:mm format
-        close: string; // Closing time in HH:mm format
-    }[];
+    // openingHours: { 
+    //     day: string; // e.g., 'Monday', 'Tuesday'
+    //     open: string; // Opening time in HH:mm format
+    //     close: string; // Closing time in HH:mm format
+    // }[];
     languages: string[]; // List of supported languages, e.g., ['en', 'fr']
     socialMedia?: { 
         platform: string; // e.g., 'Facebook', 'Instagram'
         url: string; // Link to the restaurant's social media profile
     }[];
-    currency: string; // Currency symbol (e.g., '$', '€')
-    taxSettings?: {
-        taxRate: number; // Percentage tax rate
-        inclusive: boolean; // True if tax is included in prices
-    };
+    // currency: string; // Currency symbol (e.g., '$', '€')
+    // taxSettings?: {
+    //     taxRate: number; // Percentage tax rate
+    //     inclusive: boolean; // True if tax is included in prices
+    // };
     theme?: {
         primaryColor: string; // Hex color for the primary theme
         secondaryColor: string; // Hex color for the secondary theme

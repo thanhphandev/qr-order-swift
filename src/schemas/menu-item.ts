@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const basicInformationSchema = z.object({
   name: z.string().min(3, "Tên phải có ít nhất 3 ký tự"),
-  description: z.string().min(10, "Mô tả phải có ít nhất 10 ký tự"),
+  description: z.string().optional(),
   category: z.string(),
   subcategory: z.string().optional(),
   price: z.number().min(0, "Giá không được nhỏ hơn 0"),

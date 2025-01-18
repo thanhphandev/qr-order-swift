@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import { OrderType } from '@/types/order';
 import { Clock, PrinterIcon, User, FileEdit, ClipboardList, Calendar, Info, Truck, CreditCard, CheckCircle, XCircle } from 'lucide-react';
 import { formatMoney, formatDate } from '@/lib/utils';
-import { updateOrderStatus, deleteOrder } from '@/actions/order.action';
+import { updateOrderStatus } from '@/actions/order.action';
 import { toast } from 'sonner';
 import { OrderStatus } from '@/components/widgets/status-badge';
 

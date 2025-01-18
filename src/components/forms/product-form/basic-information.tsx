@@ -112,7 +112,7 @@ const BasicInformation = () => {
             <FormItem className="space-y-2">
               <FormLabel className="text-base font-semibold flex items-center gap-2">
                 <FileText className="w-4 h-4" />
-                <span className="inline-block">Mô tả *</span>
+                <span className="inline-block">Mô tả </span>
               </FormLabel>
               <FormControl>
                 <Textarea

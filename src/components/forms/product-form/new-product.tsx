@@ -13,7 +13,7 @@ import {
   type ProductFormValues,
 } from "@/schemas/menu-item";
 import { toast } from "sonner";
-import { createMenuItem } from "@/actions/menu-item.action";
+import { checkExistProduct, createMenuItem } from "@/actions/menu-item.action";
 import { useCategoryStore } from "@/stores/categories-store";
 
 const stepComponents = [
@@ -50,6 +50,11 @@ export default function NewProduct({onOpenChange}: NewProductProps) {
   const onSubmit = async (values: ProductFormValues) => {
     try {
       setIsSubmitting(true);
+      const isExist = await checkExistProduct(values.name);
+      if (isExist) {
+        toast.error("Sản phẩm đã tồn tại");
+        return;
+      }
       await createMenuItem(values)
       onOpenChange(false);
       toast.success("Tạo sản phẩm thành công");

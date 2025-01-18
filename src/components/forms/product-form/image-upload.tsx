@@ -89,7 +89,7 @@ const ImageUpload = ({
       const data = new FormData()
       data.set('file', optimizedFile)
 
-      const response = await fetch('/api/v1/uploads', {
+      const response = await fetch('/api/uploads', {
         method: 'POST',
         body: data
       })

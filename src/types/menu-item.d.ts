@@ -2,7 +2,7 @@ export interface MenuItemType {
     _id: string,
     slug?: string,
     name: string,
-    description: string,
+    description?: string,
     category: string, // Link to category._id
     subcategory?: string, // Link to subcategory._id
     price: number,

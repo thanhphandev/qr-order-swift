@@ -12,7 +12,7 @@ export const createMenuItem = async (data: ProductFormValues) => {
     try {
         const formatedData = {
             ...data,
-            slug: toPathLink(data.name),
+            slug: toPathLink(data.name.trim()),
         }
         const menuItem = new MenuItem(formatedData);
         await connectDB();
@@ -26,6 +26,19 @@ export const createMenuItem = async (data: ProductFormValues) => {
         throw new Error(`Error creating menu item: ${error}`);
     }
 };
+
+export const checkExistProduct = async (name: string): Promise<boolean> => {
+    try {
+        await connectDB();
+
+        const exists = await MenuItem.exists({ name }).lean();
+        return !!exists;
+    } catch (error) {
+        console.error('Error checking exist path:', error);
+        throw new Error(`Unable to check path existence for name ${error}`);
+    }
+};
+
 
 export const getProductBySlug = async (slug: string): Promise<MenuItemType | null> => {
     try {
