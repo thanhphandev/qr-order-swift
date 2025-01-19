@@ -4,6 +4,10 @@ const SettingsSchema = new Schema({
     restaurantName: {type: String, required: true},
     logoUrl: { type: String },
     description: {type: String},
+    tables: [{
+        zone: {type: String},
+        count: {type: Number, required: true},
+    }],
     contactInfo: {
         address: {type: String, required: true},
         phone: {type: String, required: true},

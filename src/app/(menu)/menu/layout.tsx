@@ -10,7 +10,6 @@ interface MenuLayoutProps {
 
 const MenuLayout = async ({ children }: MenuLayoutProps) => {
     const categories = await getCategories();
-    const availableTables = Array.from({ length: 10 }, (_, i) => `${i + 1}`);
 
     return (
         <>
@@ -18,7 +17,6 @@ const MenuLayout = async ({ children }: MenuLayoutProps) => {
             <CategoryBar categories={categories} />
             {children}
             <Footer />
-            <CartView tables={availableTables} />
         </>
     )
 }

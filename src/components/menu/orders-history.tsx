@@ -63,6 +63,11 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
                                     order.typeOrder === 'take-away' ? 'Mang đi' : 'Giao hàng'}
                             </span>
                             <p className='text-sm'>Mã đơn: {order._id}</p>
+                            {order.table && (
+                                <span className="flex items-center font-bold text-orange-500">
+                                    Bàn: {order.table}
+                                </span>
+                            )}
                         </div>
                     </div>
                     <div className="flex items-center gap-4">

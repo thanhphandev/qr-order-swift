@@ -94,7 +94,7 @@ export default function App() {
       
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="bg-orange-50">
-          <TabsTrigger value="general" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
+          <TabsTrigger value="general" className="data-[state=active]:bg-orange-500 border-l-2 data-[state=active]:text-white">
             General
           </TabsTrigger>
           <TabsTrigger value="contact" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">

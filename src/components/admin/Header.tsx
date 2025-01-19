@@ -8,7 +8,7 @@ interface AdminHeaderProps {
     onMenuClick: () => void
 }
 const AdminHeader = ({ onMenuClick }: AdminHeaderProps) => {
-    const notifications = 3;
+    const notifications = 10;
 
     return (
         <header className="fixed top-0 z-50 w-full bg-white border-b border-orange-100">

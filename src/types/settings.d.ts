@@ -2,6 +2,11 @@ export interface SettingsType {
     restaurantName: string;
     logoUrl?: string;
     description?: string;
+    tables: number;
+    tablesPerZone: {
+        zone?: string;
+        count: number;
+    }[]
     contactInfo: {
         address: string;
         phone: string;
@@ -17,10 +22,8 @@ export interface SettingsType {
         zalo?: string;
         instagram?: string;
     }
-    notifications?: {
-        enableEmail: boolean;
-        enableTelegram: boolean;
-        enableMessenger: boolean;
-    };
+    botApiKey?: {
+        telegram?: string;
+    }
     
 }
