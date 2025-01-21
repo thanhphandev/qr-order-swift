@@ -3,27 +3,26 @@ export interface SettingsType {
     logoUrl?: string;
     description?: string;
     tables: number;
-    tablesPerZone: {
-        zone?: string;
+    tablesPerZone?: {
+        zone: string;
         count: number;
     }[]
     contactInfo: {
         address: string;
         phone: string;
         email?: string;
-        bankAccount?: {
-            bankName: string;
-            accountNumber: string;
-            accountName: string;
-        }
+    };
+    bankAccount?: {
+        bankName: string;
+        accountNumber: string;
+        accountName: string;
     };
     socialMedia?: {
         facebook?: string;
         zalo?: string;
         instagram?: string;
-    }
-    botApiKey?: {
-        telegram?: string;
-    }
+    };
+    telegramToken?: string;
+    chatId?: string;
     
 }

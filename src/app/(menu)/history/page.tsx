@@ -25,8 +25,8 @@ const Page = () => {
     }, [orders, searchTerm]);
 
     return (
-        <div className="container mx-auto px-4 py-6">
-            <button className='px-4 py-2 bg-orange-500 rounded-xl text-white' onClick={() => router.push("/menu")}>Quay lại</button>
+        <div className="container mx-auto px-4 py-6  mb-14">
+            <button className='px-4 py-2 bg-orange-500 rounded-xl text-white mb-8' onClick={() => router.push("/menu")}>Quay lại</button>
             <div className="max-w-4xl mx-auto">
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold text-orange-500 mb-4">Lịch sử đơn hàng</h1>

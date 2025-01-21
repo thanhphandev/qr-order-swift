@@ -1,19 +1,20 @@
 "use client"
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import CartButton from '@/components/cart/cart-button';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CartProduct } from './cart-product';
 import { useCartStore } from '@/stores/cart-store';
-import { formatMoney } from '@/lib/utils';
+import { formatMoney, generateTables } from '@/lib/utils';
 import { toast } from 'sonner';
 import { DiningOption } from '@/components/cart/option-button';
 import { CreateOrderData, status, typeOrder } from "@/types/order";
-import { createOrder, triggerOrder } from '@/actions/order.action';
+import { createOrder, sendTelegramNotification, triggerOrder } from '@/actions/order.action';
 import useOrdersStore from '@/stores/orders-store';
+import { useSettingsStore } from '@/stores/settings-store';
 
-const CartView = ({ tables }: { tables: string[] }) => {
+const CartView = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [tableNumber, setTableNumber] = useState<string | null>(null);
     const [notes, setNotes] = useState<string>('');
@@ -23,6 +24,9 @@ const CartView = ({ tables }: { tables: string[] }) => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const { cartProducts, updateQuantity, clearCart } = useCartStore();
     const { addOrder } = useOrdersStore();
+    const { settings } = useSettingsStore();
+
+    const tables = generateTables({ tables: settings.tables, tablesPerZone: settings.tablesPerZone || [] });
 
     const subTotal = cartProducts.reduce((sum, product) => sum + product.price * product.quantity, 0);
     const totalQuantity = cartProducts.reduce((sum, product) => sum + product.quantity, 0);
@@ -129,9 +133,12 @@ const CartView = ({ tables }: { tables: string[] }) => {
             const order = await createOrder(orderData);
             if (order) {
                 await triggerOrder(order);
+                if(settings.telegramToken && settings.chatId) {
+                    await sendTelegramNotification(order, settings.telegramToken, settings.chatId);
+                }
                 addOrder(order);
             }
-           
+
             toast.success('Đã đặt món thành công! cám ơn quý khách');
         } catch (error) {
             console.error('Error creating order:', error);

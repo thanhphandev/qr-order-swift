@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import {formatDistanceToNowStrict} from 'date-fns'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -26,24 +26,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function relativeDate(from: Date){
+export function relativeDate(from: Date) {
   if (isNaN(from.getTime())) {
     return 'Invalid date';
   }
   return formatDistanceToNowStrict(from, { addSuffix: true, locale: vi })
 }
 
-export function formatMoney(amount: number){
+export function formatMoney(amount: number) {
   return new Intl.NumberFormat('vi-VN',
-    { style: 'currency',
-     currency: 'VND' }).format(amount)
+    {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount)
 }
 
 export function toPathLink(text: string): string {
-  
+
   const from = "àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ";
   const to = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd";
-  
+
   let normalized = text
     .toLowerCase()
     .split('')
@@ -52,7 +54,7 @@ export function toPathLink(text: string): string {
       return index !== -1 ? to[index] : char;
     })
     .join('');
-  
+
   normalized = normalized
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '');
@@ -75,3 +77,20 @@ export function formatNumber(value: number): string {
   }
   return `${value.toLocaleString('vi-VN')} VNĐ`;
 }
+
+export const generateTables = ({ tables, tablesPerZone }:
+  {
+    tables: number, tablesPerZone: {
+      zone: string;
+      count: number
+    }[]
+  }
+): string[] => {
+  if (tablesPerZone && tablesPerZone.length > 0) {
+    return tablesPerZone.flatMap(({ zone, count }) =>
+      Array.from({ length: count }, (_, i) => `${zone}-${i + 1}`)
+    );
+  }
+
+  return Array.from({ length: tables }, (_, i) => `${i + 1}`);
+};

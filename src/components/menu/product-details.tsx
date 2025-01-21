@@ -117,7 +117,7 @@ export default function ProductDetail({ product }: ProductDetailsProps) {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3">
@@ -129,7 +129,7 @@ export default function ProductDetail({ product }: ProductDetailsProps) {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-6">
+      <main className="max-w-6xl mx-auto px-4 py-6 mb-14">
         <div className="bg-white rounded-2xl shadow-md overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Product Image */}

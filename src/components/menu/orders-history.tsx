@@ -37,7 +37,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     const toggleExpand = () => setIsExpanded(!isExpanded);
 
     return (
-        <Card className="w-full max-w-4xl mx-auto mb-4 hover:shadow-lg transition-shadow duration-200">
+        <Card className="w-full max-w-4xl mx-auto hover:shadow-lg transition-shadow duration-200">
             {/* Order Summary - Always Visible */}
             <CardHeader
                 className="cursor-pointer"

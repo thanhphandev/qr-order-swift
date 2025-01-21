@@ -6,6 +6,7 @@ import { Order } from "@/models/Order";
 import { pusherServer } from "@/lib/pusher";
 import { Types } from 'mongoose';
 import type { status as StatusType } from "@/types/order";
+import { formatMoney } from "@/lib/utils";
 
 export async function createOrder(orderData: CreateOrderData) {
     try {
@@ -57,6 +58,7 @@ export const triggerOrder = async (order: OrderType) => {
     }
 }
 
+
 export const triggerOrderStatus = async (orderId: string, status: StatusType): Promise<void> => {
     try {
         await pusherServer.trigger('orders', 'order-status', {
@@ -67,6 +69,65 @@ export const triggerOrderStatus = async (orderId: string, status: StatusType): P
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         console.error(`Failed to trigger order status: ${errorMessage}`);
         throw new Error(`Order status trigger failed: ${errorMessage}`);
+    }
+};
+
+export const sendTelegramNotification = async (order: OrderType, token: string, chatID: string) => {
+    try {
+        const chatId = chatID; // Thay bằng ID chat hoặc lấy từ settings
+        let message = `🛒 Đơn hàng mới:\n`;
+        message += `- Loại: ${order.typeOrder}\n`;
+        message += `- Tổng tiền: ${formatMoney(order.totalAmount)}\n`;
+        message += `- Bàn: ${order.table || 'N/A'}\n`;
+
+        // Customer Info
+        if (order.customerInfo) {
+            message += `- Tên KH: ${order.customerInfo?.customerName|| 'N/A'}\n`;
+            message += `- SĐT: ${order.customerInfo?.phoneNumber || 'N/A'}\n`;
+            message += `- Địa chỉ: ${order.customerInfo?.deliveryAddress || 'N/A'}\n`;
+        }
+
+        // Items details
+        message += `\nCác món ăn:\n`;
+        order.items.forEach(item => {
+            message += `  * Món: ${item.name} x ${item.quantity} | Giá: ${formatMoney(item.price)}\n`;
+            if (item.size) {
+                message += `    - Kích thước: ${item.size}\n`;
+            }
+            if (item.toppings && item.toppings.length > 0) {
+                message += `    - Toppings:\n`;
+                item.toppings.forEach(topping => {
+                    message += `      + ${topping.name} x ${topping.quantity} | Giá: ${formatMoney(topping.price)}\n`;
+                });
+            }
+        });
+
+        // Notes if available
+        if (order.notes) {
+            message += `\nGhi chú: ${order.notes}\n`;
+        }
+
+        // Prepare the fetch request
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+            }),
+        });
+
+        const data = await response.json();
+        if (data.ok) {
+            console.log('Thông báo Telegram gửi thành công');
+        } else {
+            console.error('Lỗi khi gửi thông báo Telegram:', data.description);
+        }
+    } catch (error) {
+        console.error('Lỗi khi gửi thông báo Telegram:', error);
     }
 };
 

@@ -1,15 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion'
 import { Search, History, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useSettingsStore } from '@/stores/settings-store';
 
 const Header = () => {
   const [search, setSearch] = useState<string>('');
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
+  const { settings, fetchSettings } = useSettingsStore();
   const router = useRouter();
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
 
   return (
     <header className="top-0 z-50 w-full bg-white shadow-sm transition-all duration-500">
@@ -25,8 +31,8 @@ const Header = () => {
             transition={{ duration: 0.3 }}
             className="flex items-center space-x-2 overflow-hidden"
           >
-            <Image src="/logo.svg" alt="Logo" width={60} height={40} />
-            <h1 className="font-semibold text-2xl text-orange-600">SwiftFood</h1>
+            {settings.logoUrl && <Image src={settings.logoUrl} alt="Logo" width={60} height={40} />}
+            <h1 className="text-2xl font-bold text-orange-600">{settings.restaurantName || "OpenSwift"}</h1>
           </motion.div>
 
           {/* Search Section - Expandable */}

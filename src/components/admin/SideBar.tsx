@@ -73,7 +73,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       id: 'settings',
       title: 'Cài đặt',
       icon: Settings,
-      path: '/settings',
+      path: '/admin/settings',
     },
   ];
 
